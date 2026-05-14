@@ -3,11 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ArcticClient</title>
+    <title>ArcticIDE</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="client-name">ArcticClient</div>
+    <div class="ide-shell">
+        <aside class="activity-bar" aria-label="Primary workspace navigation">
+            <button class="activity-item active" title="Explorer" aria-label="Explorer">📁</button>
+            <button class="activity-item" title="Search" aria-label="Search">🔎</button>
+            <button class="activity-item" title="Source Control" aria-label="Source Control">⑂</button>
+            <button class="activity-item" title="Database" aria-label="Database">▣</button>
+            <button class="activity-item" title="Packages" aria-label="Packages">⬡</button>
+        </aside>
+
+        <aside class="sidebar">
+            <div class="brand-row">
+                <img src="client_logo.png" alt="ArcticIDE logo" class="brand-logo">
+                <div>
+                    <p class="eyebrow">Workspace</p>
+                    <h1>ArcticIDE</h1>
+                </div>
+            </div>
+
+            <section class="panel-card">
+                <div class="panel-title">Explorer</div>
+                <ul class="file-tree" aria-label="Project files">
+                    <li class="folder open">arctic-client</li>
+                    <li class="nested active-file">src/App.jsx</li>
+                    <li class="nested">src/db/schema.sql</li>
+                    <li class="nested">package.json</li>
+                    <li class="nested">README.md</li>
+                </ul>
+            </section>
+
+            <section class="panel-card compact">
+                <div class="panel-title">Services</div>
+                <div class="service healthy"><span></span> Dev server :5173</div>
+                <div class="service healthy"><span></span> SQLite connected</div>
+                <div class="service warning"><span></span> 2 npm updates</div>
+            </section>
+        </aside>
+
+        <main class="workspace">
+            <header class="topbar">
+                <div class="tab-group" role="tablist" aria-label="Open editor tabs">
+                    <button class="tab active" role="tab">App.jsx</button>
+                    <button class="tab" role="tab">schema.sql</button>
+                    <button class="tab" role="tab">package.json</button>
+                </div>
+                <div class="actions">
+                    <button id="runBuild" class="primary-action">▶ Run npm build</button>
+                    <button id="seedDb" class="secondary-action">Seed DB</button>
+                </div>
+            </header>
+
+            <section class="editor-grid">
+                <article class="editor-pane" aria-label="Code editor">
+                    <div class="pane-header">
+                        <span>src/App.jsx</span>
+                        <span class="status-pill">JavaScript</span>
+                    </div>
+                    <pre class="code-editor"><code><span class="line">1</span><span class="keyword">import</span> { useState } <span class="keyword">from</span> <span class="string">'react'</span>;
+<span class="line">2</span>
+<span class="keyword">import</span> database <span class="keyword">from</span> <span class="string">'./db'</span>;
+<span class="line">3</span>
+<span class="line">4</span><span class="keyword">export default function</span> App() {
+<span class="line">5</span>  <span class="keyword">const</span> [tasks, setTasks] = useState(database.tasks);
+<span class="line">6</span>
+<span class="line">7</span>  <span class="keyword">return</span> &lt;Dashboard tasks={tasks} /&gt;;
+<span class="line">8</span>}</code></pre>
+                </article>
+
+                <aside class="inspector-pane" aria-label="Database and npm tools">
+                    <section class="tool-card database-card">
+                        <div class="tool-card-header">
+                            <div>
+                                <p class="eyebrow">Database</p>
+                                <h2>SQLite Browser</h2>
+                            </div>
+                            <span class="status-pill online">Online</span>
+                        </div>
+                        <div class="query-box">SELECT * FROM users LIMIT 4;</div>
+                        <table>
+                            <thead>
+                                <tr><th>id</th><th>name</th><th>role</th></tr>
+                            </thead>
+                            <tbody id="dbRows">
+                                <tr><td>1</td><td>Ada</td><td>admin</td></tr>
+                                <tr><td>2</td><td>Linus</td><td>dev</td></tr>
+                                <tr><td>3</td><td>Grace</td><td>dba</td></tr>
+                            </tbody>
+                        </table>
+                    </section>
+
+                    <section class="tool-card npm-card">
+                        <div class="tool-card-header">
+                            <div>
+                                <p class="eyebrow">Packages</p>
+                                <h2>npm Toolkit</h2>
+                            </div>
+                            <span class="status-pill">v10.8</span>
+                        </div>
+                        <div class="package-list">
+                            <div><strong>react</strong><span>latest</span></div>
+                            <div><strong>vite</strong><span>dev</span></div>
+                            <div><strong>sqlite-wasm</strong><span>ready</span></div>
+                        </div>
+                        <button id="installPackage" class="wide-button">npm install</button>
+                    </section>
+                </aside>
+            </section>
+
+            <section class="terminal-panel" aria-label="Integrated terminal">
+                <div class="terminal-tabs">
+                    <button class="terminal-tab active">Terminal</button>
+                    <button class="terminal-tab">Problems</button>
+                    <button class="terminal-tab">Output</button>
+                </div>
+                <div id="terminalOutput" class="terminal-output" aria-live="polite">
+                    <p><span>$</span> npm run dev</p>
+                    <p class="success">✓ ArcticIDE ready at http://localhost:5173</p>
+                    <p><span>$</span> sqlite3 workspace.db ".tables"</p>
+                    <p>users projects migrations</p>
+                </div>
+                <form id="terminalForm" class="terminal-input">
+                    <span>$</span>
+                    <input id="terminalCommand" type="text" placeholder="Try: npm test, db:seed, git status" autocomplete="off">
+                </form>
+            </section>
+        </main>
+    </div>
     <script src="eagler.js"></script>
     <script src="classes.js"></script>
 </body>
